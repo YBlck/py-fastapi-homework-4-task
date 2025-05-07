@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Annotated
 
 from fastapi import UploadFile, Form, File, HTTPException
 from pydantic import BaseModel, field_validator, HttpUrl
@@ -18,17 +19,18 @@ class ProfileCreationRequestSchema(BaseModel):
     gender: str
     date_of_birth: date
     info: str
+    # use this in endpoint - Depends(ProfileCreationRequestSchema.from_form)
     avatar: UploadFile
 
     @classmethod
     def from_form(
         cls,
-        first_name: str = Form(...),
-        last_name: str = Form(...),
-        gender: str = Form(...),
-        date_of_birth: date = Form(...),
-        info: str = Form(...),
-        avatar: UploadFile = File(...),
+        first_name: Annotated[str, Form(...)],
+        last_name: Annotated[str, Form(...)],
+        gender: Annotated[str, Form(...)] ,
+        date_of_birth: Annotated[date, Form(...)] ,
+        info: Annotated[str, Form(...)] ,
+        avatar: Annotated[UploadFile, File(...)]
     ) -> "ProfileCreationRequestSchema":
         return cls(
             first_name=first_name,

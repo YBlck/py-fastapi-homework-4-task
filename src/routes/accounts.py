@@ -35,6 +35,7 @@ from security.interfaces import JWTAuthManagerInterface
 
 router = APIRouter()
 
+# all double slashes are removed now
 ACCOUNTS_URL = "http://127.0.0.1:8000/api/v1/accounts/"
 
 
@@ -133,6 +134,7 @@ async def register_user(
             detail="An error occurred during user creation."
         ) from e
     else:
+        # here is no double slashes in a link
         activation_url = f"{ACCOUNTS_URL}activate/?token={activation_token.token}"
         background_tasks.add_task(
             email_sender.send_activation_email,
@@ -234,6 +236,7 @@ async def activate_account(
     await db.delete(token_record)
     await db.commit()
 
+    # here is no double slashes in a link
     login_url = f"{ACCOUNTS_URL}login/"
     background_tasks.add_task(
         email_sender.send_activation_complete_email,
@@ -290,6 +293,7 @@ async def request_password_reset_token(
     db.add(reset_token)
     await db.commit()
 
+    # here is no double slashes in a link
     reset_url = f"{ACCOUNTS_URL}reset-password/complete/?token={reset_token.token}"
     background_tasks.add_task(
         email_sender.send_password_reset_email,
@@ -413,6 +417,7 @@ async def reset_password(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An error occurred while resetting the password."
         )
+    # here is no double slashes in a link
     login_url = f"{ACCOUNTS_URL}login/"
     background_tasks.add_task(
         email_sender.send_password_reset_complete_email,

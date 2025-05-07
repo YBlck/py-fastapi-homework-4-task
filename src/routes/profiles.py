@@ -37,7 +37,9 @@ async def create_user_profile(
         except BaseSecurityError as error:
             raise HTTPException(status_code=401, detail=str(error))
 
+        # check if decoded user is current user
         if decoded_user_id != user_id:
+            # if he is not a current user check his group
             stmt = (
                 select(UserGroupModel)
                 .join(UserModel)
@@ -45,6 +47,7 @@ async def create_user_profile(
             )
             result = await session.execute(stmt)
             user_group = result.scalars().first()
+            # if his group is not admin raises exception
             if user_group.name != "admin":
                 raise HTTPException(
                     status_code=403,
