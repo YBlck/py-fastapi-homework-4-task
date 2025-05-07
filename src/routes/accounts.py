@@ -234,7 +234,7 @@ async def activate_account(
     await db.delete(token_record)
     await db.commit()
 
-    login_url = f"{ACCOUNTS_URL}/login/"
+    login_url = f"{ACCOUNTS_URL}login/"
     background_tasks.add_task(
         email_sender.send_activation_complete_email,
         email=str(user.email),
@@ -413,7 +413,7 @@ async def reset_password(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An error occurred while resetting the password."
         )
-    login_url = f"{ACCOUNTS_URL}/login/"
+    login_url = f"{ACCOUNTS_URL}login/"
     background_tasks.add_task(
         email_sender.send_password_reset_complete_email,
         email=str(user.email),

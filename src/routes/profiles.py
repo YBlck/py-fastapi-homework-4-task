@@ -45,7 +45,7 @@ async def create_user_profile(
             )
             result = await session.execute(stmt)
             user_group = result.scalars().first()
-            if not user_group or user_group.name == UserGroupEnum.USER:
+            if user_group.name != "admin":
                 raise HTTPException(
                     status_code=403,
                     detail="You don't have permission to edit this profile.",

@@ -18,7 +18,7 @@ class ProfileCreationRequestSchema(BaseModel):
     gender: str
     date_of_birth: date
     info: str
-    avatar: UploadFile = File(...)
+    avatar: UploadFile
 
     @classmethod
     def from_form(
